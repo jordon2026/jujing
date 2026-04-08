@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "name": "首页",
+    "code": "hero",
+    "type": "single",
+    "description": "首页顶部展示区域",
+    "sort": 1,
+    "isShow": true,
+    "createdAt": "2026-04-04T23:06:02.905337",
+    "updatedAt": "2026-04-05T00:07:51.967907"
+  },
+  {
+    "id": 2,
+    "name": "数据统计",
+    "code": "stats",
+    "type": "single",
+    "description": "首页数据统计展示",
+    "sort": 2,
+    "isShow": false,
+    "createdAt": "2026-04-04T23:06:02.905375",
+    "updatedAt": "2026-04-05T00:07:59.001182"
+  },
+  {
+    "id": 3,
+    "name": "服务介绍",
+    "code": "services",
+    "type": "list",
+    "description": "公司提供的服务项目",
+    "sort": 3,
+    "isShow": false,
+    "createdAt": "2026-04-04T23:06:02.905376",
+    "updatedAt": "2026-04-04T23:35:21.546920"
+  },
+  {
+    "id": 4,
+    "name": "案例展示",
+    "code": "cases",
+    "type": "list",
+    "description": "成功案例展示",
+    "sort": 4,
+    "isShow": true,
+    "createdAt": "2026-04-04T23:06:02.905377"
+  },
+  {
+    "id": 5,
+    "name": "新闻动态",
+    "code": "news",
+    "type": "list",
+    "description": "公司新闻和行业动态",
+    "sort": 5,
+    "isShow": true,
+    "createdAt": "2026-04-04T23:06:02.905378"
+  },
+  {
+    "id": 6,
+    "name": "关于我们",
+    "code": "about",
+    "type": "single",
+    "description": "公司介绍和发展历程",
+    "sort": 6,
+    "isShow": true,
+    "createdAt": "2026-04-04T23:06:02.905379"
+  },
+  {
+    "id": 7,
+    "name": "联系我们",
+    "code": "contact",
+    "type": "single",
+    "description": "联系方式和咨询表单",
+    "sort": 7,
+    "isShow": true,
+    "createdAt": "2026-04-04T23:06:02.905380"
+  },
+  {
+    "id": 8,
+    "name": "社会责任",
+    "code": "shzr",
+    "type": "list",
+    "description": "",
+    "sort": 1,
+    "isShow": false,
+    "createdAt": "2026-04-04T23:18:12.246659",
+    "updatedAt": "2026-04-05T00:08:44.979434"
+  }
+]

@@ -1,0 +1,2066 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>北京聚景科技有限公司 - 专注软件开发，平台系统开发10年</title>
+  <meta name="description" content="北京聚景科技专业提供网站建设、APP开发、微信开发、小程序定制开发、H5互动开发、VR应用开发、数字营销等服务。国家级高新技术企业，华为云精英服务商。">
+  <meta name="keywords" content="小程序定制,小程序开发,北京小程序公司,网站建设,网站制作,北京网站建设,北京网站制作,APP开发,微信开发,SEO优化,AI智能体开发,智能体本地化部署,人工智能开发">
+  <style>
+    /* ============================================================
+       全局变量 & 重置
+    ============================================================ */
+    :root {
+      --primary: #0af;
+      --primary-dark: #0077cc;
+      --accent: #7c3aed;
+      --glow: rgba(0, 170, 255, 0.45);
+      --bg-dark: #020c1b;
+      --bg-card: rgba(255,255,255,0.04);
+      --bg-card-hover: rgba(0,170,255,0.08);
+      --border: rgba(0,170,255,0.18);
+      --text: #e2e8f0;
+      --text-muted: #8899aa;
+      --radius: 16px;
+      --transition: all 0.35s cubic-bezier(.4,0,.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { max-width: 100%; display: block; }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--primary-dark); border-radius: 3px; }
+
+    /* ============================================================
+       星空背景动画
+    ============================================================ */
+    #stars-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       顶部信息栏
+    ============================================================ */
+    .top-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1001;
+      background: rgba(2, 12, 27, 0.9);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      backdrop-filter: blur(10px);
+    }
+    .top-bar-left { color: var(--text-muted); }
+    .top-bar-left span { color: var(--primary); margin-right: 20px; }
+    .top-bar-right {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .top-bar-right a {
+      color: var(--text-muted);
+      transition: color 0.25s;
+    }
+    .top-bar-right a:hover { color: var(--primary); }
+    .hotline {
+      color: var(--primary) !important;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    /* ============================================================
+       导航栏
+    ============================================================ */
+    .navbar {
+      position: fixed;
+      top: 40px; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6%;
+      height: 70px;
+      background: rgba(2, 12, 27, 0.75);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    .navbar.scrolled {
+      background: rgba(2, 12, 27, 0.95);
+      box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .logo-icon {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: #fff;
+      box-shadow: 0 0 16px var(--glow);
+    }
+    .logo span.brand { color: var(--primary); }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+    .nav-links a {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      position: relative;
+      padding-bottom: 4px;
+      transition: color 0.25s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--primary);
+      border-radius: 1px;
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      padding: 9px 24px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff !important;
+      box-shadow: 0 4px 18px var(--glow);
+      transition: var(--transition);
+    }
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 26px var(--glow);
+    }
+    .nav-cta::after { display: none !important; }
+
+    /* ============================================================
+       Hero 区
+    ============================================================ */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 140px 6% 60px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(0,170,255,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      font-size: 0.82rem;
+      color: var(--primary);
+      margin-bottom: 28px;
+      background: rgba(0,170,255,0.06);
+      animation: fadeInDown 0.8s ease both;
+    }
+    .hero-badge .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 0 var(--glow); }
+      50% { box-shadow: 0 0 0 6px transparent; }
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      margin-bottom: 24px;
+      animation: fadeInDown 0.9s 0.1s ease both;
+    }
+    .hero h1 .highlight {
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      max-width: 720px;
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 44px;
+      animation: fadeInDown 0.9s 0.2s ease both;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeInDown 0.9s 0.3s ease both;
+    }
+    .btn-primary {
+      padding: 14px 36px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      box-shadow: 0 6px 28px var(--glow);
+      transition: var(--transition);
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 36px var(--glow);
+    }
+    .btn-outline {
+      padding: 14px 36px;
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: rgba(0,170,255,0.07);
+      transform: translateY(-3px);
+    }
+    .hero-cards {
+      display: flex;
+      gap: 20px;
+      margin-top: 72px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeInUp 1s 0.5s ease both;
+    }
+    .stat-card {
+      padding: 22px 32px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+    }
+    .stat-card:hover {
+      border-color: var(--primary);
+      background: var(--bg-card-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 40px rgba(0,170,255,0.12);
+    }
+    .stat-card .num {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-card .label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      animation: bounce 2s infinite;
+    }
+    .scroll-hint svg { opacity: 0.5; }
+    @keyframes bounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ============================================================
+       通用 Section
+    ============================================================ */
+    section { position: relative; z-index: 1; padding: 100px 6%; }
+    .section-label {
+      display: inline-block;
+      padding: 5px 16px;
+      border: 1px solid rgba(0,170,255,0.3);
+      border-radius: 50px;
+      font-size: 0.78rem;
+      color: var(--primary);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      background: rgba(0,170,255,0.06);
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 800;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .section-title .hl {
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-desc {
+      max-width: 580px;
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 60px;
+    }
+    .section-header { margin-bottom: 60px; }
+
+    .divider {
+      position: relative;
+      z-index: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 6%;
+    }
+
+    /* ============================================================
+       服务板块
+    ============================================================ */
+    #services { background: transparent; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      padding: 36px 32px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: var(--transition);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .service-card:hover {
+      border-color: rgba(0,170,255,0.4);
+      background: var(--bg-card-hover);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,170,255,0.15);
+    }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-icon {
+      width: 56px; height: 56px;
+      border-radius: 14px;
+      background: rgba(0,170,255,0.1);
+      border: 1px solid rgba(0,170,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 24px;
+      transition: var(--transition);
+    }
+    .service-card:hover .service-icon {
+      background: rgba(0,170,255,0.18);
+      box-shadow: 0 0 20px rgba(0,170,255,0.25);
+    }
+    .service-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .service-card .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .service-card .tag {
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      color: var(--primary);
+      background: rgba(0,170,255,0.08);
+      border: 1px solid rgba(0,170,255,0.18);
+    }
+
+    /* ============================================================
+       案例展示
+    ============================================================ */
+    #cases { }
+    .cases-filter {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .filter-btn {
+      padding: 8px 22px;
+      border-radius: 50px;
+      font-size: 0.87rem;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .filter-btn.active, .filter-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: rgba(0,170,255,0.08);
+    }
+    .cases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .case-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      transition: var(--transition);
+    }
+    .case-card:hover {
+      border-color: rgba(0,170,255,0.35);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    }
+    .case-thumb {
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+    }
+    .case-thumb-bg {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+      transition: transform 0.4s ease;
+    }
+    .case-card:hover .case-thumb-bg { transform: scale(1.08); }
+    .case-thumb-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(2,12,27,0.9));
+    }
+    .case-body { padding: 20px; }
+    .case-category {
+      font-size: 0.75rem;
+      color: var(--primary);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .case-body h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .case-body p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .case-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 14px;
+      font-size: 0.85rem;
+      color: var(--primary);
+      transition: gap 0.2s;
+    }
+    .case-link:hover { gap: 10px; }
+
+    /* ============================================================
+       关于我们
+    ============================================================ */
+    #about {
+      background: linear-gradient(135deg, rgba(0,170,255,0.04) 0%, rgba(124,58,237,0.04) 100%);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .about-text .section-desc { margin-bottom: 36px; }
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .tl-item {
+      display: flex;
+      gap: 20px;
+      padding-bottom: 28px;
+      position: relative;
+    }
+    .tl-item:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 32px;
+      bottom: 0;
+      width: 1px;
+      background: var(--border);
+    }
+    .tl-dot {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--primary);
+      background: var(--bg-dark);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+    .tl-dot::after {
+      content: '';
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 10px var(--glow);
+    }
+    .tl-content h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .tl-content p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .tl-year {
+      font-size: 0.75rem;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .about-badges {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .badge-card {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 20px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: var(--transition);
+    }
+    .badge-card:hover {
+      border-color: rgba(0,170,255,0.4);
+      background: var(--bg-card-hover);
+      transform: translateX(6px);
+    }
+    .badge-icon {
+      font-size: 2.2rem;
+      flex-shrink: 0;
+    }
+    .badge-info h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .badge-info p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* ============================================================
+       新闻动态
+    ============================================================ */
+    #news { }
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 24px;
+    }
+    .news-card {
+      padding: 28px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: var(--transition);
+    }
+    .news-card:hover {
+      border-color: rgba(0,170,255,0.35);
+      transform: translateY(-4px);
+    }
+    .news-date {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .news-date .day {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+    }
+    .news-date .month-year {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .news-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .news-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .news-tag {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 4px 12px;
+      background: rgba(0,170,255,0.08);
+      border: 1px solid rgba(0,170,255,0.18);
+      border-radius: 50px;
+      font-size: 0.75rem;
+      color: var(--primary);
+    }
+
+    /* ============================================================
+       联系我们
+    ============================================================ */
+    #contact { }
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+    }
+    .contact-info { display: flex; flex-direction: column; gap: 20px; }
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: var(--transition);
+    }
+    .contact-item:hover {
+      border-color: rgba(0,170,255,0.35);
+      background: var(--bg-card-hover);
+    }
+    .contact-ico {
+      width: 44px; height: 44px;
+      flex-shrink: 0;
+      border-radius: 10px;
+      background: rgba(0,170,255,0.1);
+      border: 1px solid rgba(0,170,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+    .contact-item h4 {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .contact-item p {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group label { font-size: 0.85rem; color: var(--text-muted); }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: border-color 0.25s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0,170,255,0.1);
+    }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-submit {
+      padding: 14px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border: none;
+      border-radius: 50px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 24px var(--glow);
+      transition: var(--transition);
+      letter-spacing: 1px;
+    }
+    .form-submit:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 34px var(--glow);
+    }
+
+    /* ============================================================
+       页脚
+    ============================================================ */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 60px 6% 30px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 50px;
+    }
+    .footer-brand .logo { margin-bottom: 16px; }
+    .footer-brand p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .social-links {
+      display: flex;
+      gap: 12px;
+    }
+    .social-link {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+    .social-link:hover {
+      border-color: var(--primary);
+      background: rgba(0,170,255,0.1);
+      transform: translateY(-2px);
+    }
+    .footer-col h4 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+      color: var(--text);
+    }
+    .footer-col ul { display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul li a {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: var(--primary); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-bottom p { font-size: 0.82rem; color: var(--text-muted); }
+    .footer-icp a {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .footer-icp a:hover { color: var(--primary); }
+
+    /* ============================================================
+       动画工具
+    ============================================================ */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       滚动到顶部按钮
+    ============================================================ */
+    .back-top {
+      position: fixed;
+      bottom: 36px; right: 36px;
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      color: #fff;
+      box-shadow: 0 6px 20px var(--glow);
+      opacity: 0;
+      transform: translateY(16px);
+      transition: var(--transition);
+      z-index: 999;
+    }
+    .back-top.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .back-top:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px var(--glow);
+    }
+
+    /* ============================================================
+       响应式
+    ============================================================ */
+    @media (max-width: 900px) {
+      .top-bar { display: none; }
+      .navbar { top: 0; }
+      .hero { padding-top: 100px; }
+      .nav-links { display: none; }
+      .about-grid, .contact-wrap { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      section { padding: 70px 5%; }
+      .hero-cards { gap: 12px; }
+      .stat-card { padding: 16px 20px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .services-grid, .cases-grid, .news-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 星空背景 -->
+<canvas id="stars-canvas"></canvas>
+
+<!-- ============================================================
+     顶部信息栏
+============================================================ -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <span>🎯 专注网站建设，平台系统开发10年</span>
+  </div>
+  <div class="top-bar-right">
+    <a href="tel:13146866478" class="hotline">📞 24×7服务热线：131-4686-6478</a>
+    <a href="#contact">在线咨询</a>
+    <a href="#contact">索要报价</a>
+  </div>
+</div>
+
+<!-- ============================================================
+     导航栏
+============================================================ -->
+<nav class="navbar" id="navbar">
+  <div class="logo">
+    <div class="logo-icon">JJ</div>
+    <span>聚景<span class="brand">科技</span></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#home">首页</a></li>
+    <li><a href="#services">服务</a></li>
+    <li><a href="#cases">案例</a></li>
+    <li><a href="#news">新闻</a></li>
+    <li><a href="#about">关于</a></li>
+    <li><a href="#contact" class="nav-cta">立即咨询</a></li>
+  </ul>
+</nav>
+
+<!-- ============================================================
+     Hero
+============================================================ -->
+<section class="hero" id="home">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    高新技术企业 · 华为云合作伙伴
+  </div>
+  <h1>
+    专注网站建设<br />
+    <span class="highlight">平台系统开发10年</span>
+  </h1>
+  <p>北京聚景科技有限公司，致力于互联网品牌建设与网络营销，专业领域包括网站建设、APP开发、微信开发、小程序定制开发、H5互动设计、VR应用开发、AI智能体开发、智能体本地化部署服务等，为客户提供综合性数字化创新服务。</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">了解我们的服务</button>
+    <button class="btn-outline" onclick="document.getElementById('cases').scrollIntoView({behavior:'smooth'})">查看成功案例</button>
+  </div>
+  <div class="hero-cards">
+    <div class="stat-card">
+      <div class="num">100+</div>
+      <div class="label">技术团队</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">10+</div>
+      <div class="label">年行业经验</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">500+</div>
+      <div class="label">服务客户</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">800+</div>
+      <div class="label">成功案例</div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    向下滚动
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================
+     服务板块
+============================================================ -->
+<section id="services">
+  <div class="section-header reveal">
+    <div class="section-label">OUR SERVICES</div>
+    <h2 class="section-title">专业<span class="hl">服务体系</span></h2>
+    <p class="section-desc">以数据为核心，结合营销、内容、技术、研发多维度，为客户提供综合性数字化创新服务</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon">🌐</div>
+      <h3>网站建设</h3>
+      <p>企业官网、电商平台、行业门户等全类型网站设计与开发，响应式布局，SEO友好，高效转化。</p>
+      <div class="tags">
+        <span class="tag">企业官网</span>
+        <span class="tag">电商平台</span>
+        <span class="tag">响应式</span>
+        <span class="tag">SEO优化</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">📱</div>
+      <h3>APP开发</h3>
+      <p>iOS/Android原生及跨平台应用开发，覆盖资讯、电商、社交等多个垂直领域。</p>
+      <div class="tags">
+        <span class="tag">iOS开发</span>
+        <span class="tag">Android</span>
+        <span class="tag">原生开发</span>
+        <span class="tag">跨平台</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">💬</div>
+      <h3>微信开发</h3>
+      <p>微信公众号、企业微信、微信商城等定制化开发，助力品牌触达亿级用户。</p>
+      <div class="tags">
+        <span class="tag">公众号</span>
+        <span class="tag">企业微信</span>
+        <span class="tag">微信商城</span>
+        <span class="tag">H5互动</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">📲</div>
+      <h3>小程序定制开发</h3>
+      <p>微信、支付宝、抖音等多平台小程序定制开发，界面精美、体验流畅。</p>
+      <div class="tags">
+        <span class="tag">微信小程序</span>
+        <span class="tag">支付宝小程序</span>
+        <span class="tag">抖音小程序</span>
+        <span class="tag">跨平台</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🎮</div>
+      <h3>H5互动开发</h3>
+      <p>创意H5页面、互动游戏、营销活动页面开发，提升用户参与度和品牌传播效果。</p>
+      <div class="tags">
+        <span class="tag">创意H5</span>
+        <span class="tag">互动游戏</span>
+        <span class="tag">营销活动</span>
+        <span class="tag">品牌传播</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🥽</div>
+      <h3>VR应用开发</h3>
+      <p>VR全景展示、虚拟现实应用开发，为企业打造沉浸式数字化体验。</p>
+      <div class="tags">
+        <span class="tag">VR全景</span>
+        <span class="tag">虚拟现实</span>
+        <span class="tag">沉浸体验</span>
+        <span class="tag">3D展示</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">📈</div>
+      <h3>关键词优化/SEO</h3>
+      <p>整站优化、关键词排名、全网营销推广，提升搜索引擎排名，精准获客。</p>
+      <div class="tags">
+        <span class="tag">关键词优化</span>
+        <span class="tag">整站优化</span>
+        <span class="tag">全网营销</span>
+        <span class="tag">推广账户管理</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">☁️</div>
+      <h3>平台系统开发</h3>
+      <p>CRM、ERP、OA等企业管理系统定制开发，助力企业数字化转型。</p>
+      <div class="tags">
+        <span class="tag">CRM系统</span>
+        <span class="tag">ERP系统</span>
+        <span class="tag">OA系统</span>
+        <span class="tag">定制开发</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🤖</div>
+      <h3>AI智能体开发</h3>
+      <p>基于大语言模型的智能体定制开发，为企业提供智能客服、知识库问答、自动化办公等AI解决方案。</p>
+      <div class="tags">
+        <span class="tag">智能客服</span>
+        <span class="tag">知识库问答</span>
+        <span class="tag">自动化办公</span>
+        <span class="tag">大模型应用</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">💻</div>
+      <h3>智能体本地化部署</h3>
+      <p>为企业提供AI智能体私有化部署服务，数据安全可控，支持本地服务器、私有云等多种部署方案。</p>
+      <div class="tags">
+        <span class="tag">私有化部署</span>
+        <span class="tag">数据安全</span>
+        <span class="tag">本地服务器</span>
+        <span class="tag">私有云</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================
+     案例展示
+============================================================ -->
+<section id="cases">
+  <div class="section-header reveal">
+    <div class="section-label">PORTFOLIO</div>
+    <h2 class="section-title">精选<span class="hl">成功案例</span></h2>
+    <p class="section-desc">300+技术团队，专注高端定制开发，服务众多知名企业和政府机构</p>
+  </div>
+  <div class="cases-filter reveal">
+    <button class="filter-btn active" data-filter="all">全部</button>
+    <button class="filter-btn" data-filter="website">网站建设</button>
+    <button class="filter-btn" data-filter="app">APP开发</button>
+    <button class="filter-btn" data-filter="wechat">微信开发</button>
+    <button class="filter-btn" data-filter="miniapp">小程序</button>
+  </div>
+  <div class="cases-grid">
+    <div class="case-card reveal" data-category="website">
+      <div class="case-thumb">
+        <div class="case-thumb-bg" style="background:linear-gradient(135deg,#0a1628,#1a3a5c)">🏛️</div>
+        <div class="case-thumb-overlay"></div>
+      </div>
+      <div class="case-body">
+        <div class="case-category">网站建设</div>
+        <h3>深圳市公安局官方网站</h3>
+        <p>政府门户网站建设项目，提供全面的警务信息服务和便民功能。</p>
+        <a href="#" class="case-link">查看详情 <span>→</span></a>
+      </div>
+    </div>
+    <div class="case-card reveal" data-category="website">
+      <div class="case-thumb">
+        <div class="case-thumb-bg" style="background:linear-gradient(135deg,#0d1a2e,#1a4a3c)">⚡</div>
+        <div class="case-thumb-overlay"></div>
+      </div>
+      <div class="case-body">
+        <div class="case-category">网站建设</div>
+        <h3>国家能源集团官方网站</h3>
+        <p>大型国有企业官网建设，展示企业形象和能源业务信息。</p>
+        <a href="#" class="case-link">查看详情 <span>→</span></a>
+      </div>
+    </div>
+    <div class="case-card reveal" data-category="website">
+      <div class="case-thumb">
+        <div class="case-thumb-bg" style="background:linear-gradient(135deg,#0c1929,#3a2040)">🔴</div>
+        <div class="case-thumb-overlay"></div>
+      </div>
+      <div class="case-body">
+        <div class="case-category">网站建设</div>
+        <h3>中国大唐集团官方网站</h3>
+        <p>电力企业官网开发，突出企业实力和绿色发展理念。</p>
+        <a href="#" class="case-link">查看详情 <span>→</span></a>
+      </div>
+    </div>
+    <div class="case-card reveal" data-category="website">
+      <div class="case-thumb">
+        <div class="case-thumb-bg" style="background:linear-gradient(135deg,#0a1624,#204060)">🔵</div>
+        <div class="case-thumb-overlay"></div>
+      </div>
+      <div class="case-body">
+        <div class="case-category">网站建设</div>
+        <h3>中国华能集团官方网站</h3>
+        <p>能源行业官网建设，专业大气的企业形象展示平台。</p>
+        <a href="#" class="case-link">查看详情 <span>→</span></a>
+      </div>
+    </div>
+    <div class="case-card reveal" data-category="miniapp">
+      <div class="case-thumb">
+        <div class="case-thumb-bg" style="background:linear-gradient(135deg,#0b1a2e,#2a4060)">📚</div>
+        <div class="case-thumb-overlay"></div>
+      </div>
+      <div class="case-body">
+        <div class="case-category">小程序开发</div>
+        <h3>小程序-作业打卡-学习平台</h3>
+        <p>教育类小程序，提供作业打卡、学习进度跟踪等功能。</p>
+        <a href="#" class="case-link">查看详情 <span>→</span></a>
+      </div>
+    </div>
+    <div class="case-card reveal" data-category="miniapp">
+      <div class="case-thumb">
+        <div class="case-thumb-bg" style="background:linear-gradient(135deg,#0c1b30,#3a5030)">🏞️</div>
+        <div class="case-thumb-overlay"></div>
+      </div>
+      <div class="case-body">
+        <div class="case-category">小程序开发</div>
+        <h3>小程序-智慧景区</h3>
+        <p>旅游景区导览小程序，提供景点介绍、路线规划、在线购票等服务。</p>
+        <a href="#" class="case-link">查看详情 <span>→</span></a>
+      </div>
+    </div>
+    <div class="case-card reveal" data-category="miniapp">
+      <div class="case-thumb">
+        <div class="case-thumb-bg" style="background:linear-gradient(135deg,#0a1628,#503020)">🏗️</div>
+        <div class="case-thumb-overlay"></div>
+      </div>
+      <div class="case-body">
+        <div class="case-category">平台开发</div>
+        <h3>善商建材共享平台</h3>
+        <p>建材行业B2B共享平台，连接供应商与采购商，提升交易效率。</p>
+        <a href="#" class="case-link">查看详情 <span>→</span></a>
+      </div>
+    </div>
+    <div class="case-card reveal" data-category="miniapp">
+      <div class="case-thumb">
+        <div class="case-thumb-bg" style="background:linear-gradient(135deg,#0d1a2e,#405020)">🌾</div>
+        <div class="case-thumb-overlay"></div>
+      </div>
+      <div class="case-body">
+        <div class="case-category">小程序开发</div>
+        <h3>小程序-养殖众筹平台-智慧农场</h3>
+        <p>农业众筹小程序，连接城市消费者与农村养殖场，实现透明化养殖。</p>
+        <a href="#" class="case-link">查看详情 <span>→</span></a>
+      </div>
+    </div>
+    <div class="case-card reveal" data-category="app">
+      <div class="case-thumb">
+        <div class="case-thumb-bg" style="background:linear-gradient(135deg,#0c1929,#602040)">📰</div>
+        <div class="case-thumb-overlay"></div>
+      </div>
+      <div class="case-body">
+        <div class="case-category">APP开发</div>
+        <h3>并读 - 新闻资讯APP</h3>
+        <p>个性化新闻推荐应用，智能算法推送用户感兴趣的内容。</p>
+        <a href="#" class="case-link">查看详情 <span>→</span></a>
+      </div>
+    </div>
+    <div class="case-card reveal" data-category="app">
+      <div class="case-thumb">
+        <div class="case-thumb-bg" style="background:linear-gradient(135deg,#0a1624,#204050)">📺</div>
+        <div class="case-thumb-overlay"></div>
+      </div>
+      <div class="case-body">
+        <div class="case-category">APP开发</div>
+        <h3>看看新闻</h3>
+        <p>视频新闻客户端，提供及时、全面的新闻资讯服务。</p>
+        <a href="#" class="case-link">查看详情 <span>→</span></a>
+      </div>
+    </div>
+    <div class="case-card reveal" data-category="wechat">
+      <div class="case-thumb">
+        <div class="case-thumb-bg" style="background:linear-gradient(135deg,#0b1a2e,#502060)">🧘</div>
+        <div class="case-thumb-overlay"></div>
+      </div>
+      <div class="case-body">
+        <div class="case-category">微信开发</div>
+        <h3>瑜伽优课</h3>
+        <p>瑜伽健身类微信公众号，提供课程预约、健身指导等服务。</p>
+        <a href="#" class="case-link">查看详情 <span>→</span></a>
+      </div>
+    </div>
+    <div class="case-card reveal" data-category="wechat">
+      <div class="case-thumb">
+        <div class="case-thumb-bg" style="background:linear-gradient(135deg,#0c1b30,#603020)">📖</div>
+        <div class="case-thumb-overlay"></div>
+      </div>
+      <div class="case-body">
+        <div class="case-category">微信开发</div>
+        <h3>读书有范</h3>
+        <p>阅读分享类公众号，提供优质书籍推荐和读书心得分享。</p>
+        <a href="#" class="case-link">查看详情 <span>→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================
+     新闻动态
+============================================================ -->
+<section id="news">
+  <div class="section-header reveal">
+    <div class="section-label">NEWS</div>
+    <h2 class="section-title">新闻<span class="hl">动态</span></h2>
+    <p class="section-desc">创意似金，敬业如牛，每天成长一点</p>
+  </div>
+  <div class="news-grid">
+    <div class="news-card reveal">
+      <div class="news-date">
+        <span class="day">11</span>
+        <span class="month-year">03月<br/>2021</span>
+      </div>
+      <h3>喜讯!热烈祝贺北京聚景科技有限公司获得国家级高新技术企业认定!</h3>
+      <p>近期北京市怀柔区人民政府官网公布了"北京市怀柔区科学技术委员会关于领取2020年第三、四批高新技术企业认定证书"的通知，我司作为一家综合性高科技企业，荣登榜单之中，这标志着我司在研发和创新方面得到国家相关部门的肯定与认可，由此正式迈入高新技术企业行列，可喜可贺...</p>
+      <span class="news-tag">企业网站建设</span>
+    </div>
+    <div class="news-card reveal">
+      <div class="news-date">
+        <span class="day">27</span>
+        <span class="month-year">08月<br/>2020</span>
+      </div>
+      <h3>北京聚景科技有限公司正式成为华为云精英服务商，携手华为，共赢未来</h3>
+      <p>公司正式获评华为云精英服务商资质，与华为云建立深度合作关系，为客户提供更优质的云服务解决方案。</p>
+      <span class="news-tag">企业网站建设</span>
+    </div>
+    <div class="news-card reveal">
+      <div class="news-date">
+        <span class="day">24</span>
+        <span class="month-year">04月<br/>2020</span>
+      </div>
+      <h3>喜报：北京聚景科技有限公司荣获小聚CMS网站管理系统计算机软件著作权</h3>
+      <p>小聚CMS网站管理软件获得计算机软件著作权认证，这是公司自主研发的核心产品之一，针对企业主体、管理团队、运营人员、销售人员、人事，通过登录和使用Web平台，有效的管理客户信息、人员信息、订单信息。</p>
+      <span class="news-tag">企业网站优化</span>
+    </div>
+    <div class="news-card reveal">
+      <div class="news-date">
+        <span class="day">24</span>
+        <span class="month-year">04月<br/>2020</span>
+      </div>
+      <h3>喜报：北京聚景科技有限公司荣获商会通系统计算机软件著作权</h3>
+      <p>商会通软件获得国家计算机软件著作权认证，为商会组织提供专业的信息化管理解决方案。</p>
+      <span class="news-tag">北京网站建设</span>
+    </div>
+    <div class="news-card reveal">
+      <div class="news-date">
+        <span class="day">24</span>
+        <span class="month-year">04月<br/>2020</span>
+      </div>
+      <h3>喜报：北京聚景科技有限公司荣获景区移动导览系统计算机软件著作权</h3>
+      <p>景区移动导览软件获得国家计算机软件著作权认证，为旅游景区提供智能化的导览服务解决方案。</p>
+      <span class="news-tag">企业网站优化</span>
+    </div>
+    <div class="news-card reveal">
+      <div class="news-date">
+        <span class="day">24</span>
+        <span class="month-year">04月<br/>2020</span>
+      </div>
+      <h3>喜报：北京聚景科技有限公司荣获微信管理小助手系统计算机软件著作权</h3>
+      <p>微信管理小助手软件获得计算机软件著作权认证，帮助企业高效管理微信公众号运营。</p>
+      <span class="news-tag">北京网站建设</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================
+     关于我们
+============================================================ -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-text">
+      <div class="section-label reveal">ABOUT US</div>
+      <h2 class="section-title reveal">关于<span class="hl">聚景科技</span></h2>
+      <p class="section-desc reveal">聚景科技自公司创立至今，始终坚持从事网站定制，信息系统开发。公司总部位于北京，秉承实现全网价值营销的理念，以数据为核心，结合营销、内容、技术、研发多维度为客户提供综合性数字化创新服务，帮助传统企业实现"互联网+"转型升级。</p>
+      <div class="timeline reveal">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <div class="tl-year">2017年</div>
+            <h4>公司成立</h4>
+            <p>北京聚景科技有限公司成立，开始从事高端精品策划设计</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <div class="tl-year">2020年</div>
+            <h4>荣获多项软件著作权</h4>
+            <p>小聚CMS、商会通、景区移动导览、微信管理小助手等系统获得计算机软件著作权</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <div class="tl-year">2020年</div>
+            <h4>成为华为云精英服务商</h4>
+            <p>正式获评华为云精英服务商资质，携手华为共赢未来</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <div class="tl-year">2021年</div>
+            <h4>国家级高新技术企业</h4>
+            <p>获得国家级高新技术企业认定，正式迈入高新技术企业行列</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="about-badges reveal">
+      <div class="badge-card">
+        <div class="badge-icon">🏆</div>
+        <div class="badge-info">
+          <h4>高新技术企业</h4>
+          <p>2021年正式认定，研发创新实力获认可</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">☁️</div>
+        <div class="badge-info">
+          <h4>华为云合作伙伴</h4>
+          <p>2020年正式授牌，云生态深度合作伙伴</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">📜</div>
+        <div class="badge-info">
+          <h4>多项软件著作权</h4>
+          <p>小聚CMS、商会通、景区导览等系统获著作权认证</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">👥</div>
+        <div class="badge-info">
+          <h4>100+技术团队</h4>
+          <p>充满活力的90后团队，专注高端定制开发</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">⭐</div>
+        <div class="badge-info">
+          <h4>10年行业沉淀</h4>
+          <p>专注网站建设，平台系统开发，服务500+客户</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================
+     联系我们
+============================================================ -->
+<section id="contact">
+  <div class="section-header reveal">
+    <div class="section-label">CONTACT US</div>
+    <h2 class="section-title">联系<span class="hl">我们</span></h2>
+    <p class="section-desc">您的一次联系，成就长远合作</p>
+  </div>
+  <div class="contact-wrap">
+    <div class="contact-info">
+      <div class="contact-item reveal">
+        <div class="contact-ico">🏢</div>
+        <div>
+          <h4>公司名称</h4>
+          <p>北京聚景科技有限公司</p>
+        </div>
+      </div>
+      <div class="contact-item reveal">
+        <div class="contact-ico">📍</div>
+        <div>
+          <h4>公司地址</h4>
+          <p>北京市昌平区龙德紫金2号楼</p>
+        </div>
+      </div>
+      <div class="contact-item reveal">
+        <div class="contact-ico">📞</div>
+        <div>
+          <h4>联系电话</h4>
+          <p>010-84818211 / 131-4686-6478</p>
+        </div>
+      </div>
+      <div class="contact-item reveal">
+        <div class="contact-ico">📱</div>
+        <div>
+          <h4>手机</h4>
+          <p>131-4686-6478</p>
+        </div>
+      </div>
+      <div class="contact-item reveal">
+        <div class="contact-ico">✉️</div>
+        <div>
+          <h4>电子邮箱</h4>
+          <p>admin@jujingyun.com</p>
+        </div>
+      </div>
+      <div class="contact-item reveal">
+        <div class="contact-ico">📮</div>
+        <div>
+          <h4>邮政编码</h4>
+          <p>102218</p>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form reveal" onsubmit="submitForm(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>您的姓名 *</label>
+          <input type="text" placeholder="请输入姓名" required />
+        </div>
+        <div class="form-group">
+          <label>联系电话 *</label>
+          <input type="tel" placeholder="请输入手机号" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>公司名称</label>
+        <input type="text" placeholder="请输入公司名称" />
+      </div>
+      <div class="form-group">
+        <label>需求类型 *</label>
+        <select required>
+          <option value="">请选择服务类型</option>
+          <option>网站建设</option>
+          <option>APP开发</option>
+          <option>微信开发</option>
+          <option>小程序定制开发</option>
+          <option>H5互动开发</option>
+          <option>VR应用开发</option>
+          <option>AI智能体开发</option>
+          <option>智能体本地化部署</option>
+          <option>关键词优化/SEO</option>
+          <option>平台系统开发</option>
+          <option>其他</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>需求描述</label>
+        <textarea placeholder="请简单描述您的项目需求、预算范围或遇到的问题…"></textarea>
+      </div>
+      <button type="submit" class="form-submit">🚀 立即提交需求</button>
+    </form>
+  </div>
+</section>
+
+<!-- ============================================================
+     页脚
+============================================================ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">
+        <div class="logo-icon">JJ</div>
+        <span>聚景<span class="brand">科技</span></span>
+      </div>
+      <p>北京聚景科技有限公司 — 专注网站建设，平台系统开发10年。致力于互联网品牌建设与网络营销，为客户提供综合性数字化创新服务。</p>
+      <div class="social-links">
+        <a class="social-link" title="微信">💬</a>
+        <a class="social-link" title="微博">📰</a>
+        <a class="social-link" title="抖音">🎵</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>服务项目</h4>
+      <ul>
+        <li><a href="#services">网站建设</a></li>
+        <li><a href="#services">APP开发</a></li>
+        <li><a href="#services">微信开发</a></li>
+        <li><a href="#services">小程序定制</a></li>
+        <li><a href="#services">H5互动开发</a></li>
+        <li><a href="#services">VR应用开发</a></li>
+        <li><a href="#services">SEO优化</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>关于聚景</h4>
+      <ul>
+        <li><a href="#about">公司简介</a></li>
+        <li><a href="#about">发展历程</a></li>
+        <li><a href="#about">荣誉资质</a></li>
+        <li><a href="#cases">成功案例</a></li>
+        <li><a href="#news">新闻动态</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>快速联系</h4>
+      <ul>
+        <li><a href="#contact">在线咨询</a></li>
+        <li><a href="tel:13146866478">131-4686-6478</a></li>
+        <li><a href="tel:01084818211">010-84818211</a></li>
+        <li><a href="mailto:admin@jujingyun.com">admin@jujingyun.com</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>©2018 - 2026 北京聚景科技有限公司 All RIGHTS RESERVED.</p>
+    <div class="footer-icp">
+      <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备18004284号-1</a>
+    </div>
+  </div>
+</footer>
+
+<!-- 回到顶部 -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- ============================================================
+     JavaScript
+============================================================ -->
+<script>
+  /* ------ 星空粒子背景 ------ */
+  (function() {
+    const canvas = document.getElementById('stars-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, stars = [], lines = [];
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+
+    class Star {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * W;
+        this.y = Math.random() * H;
+        this.r = Math.random() * 1.4 + 0.3;
+        this.vx = (Math.random() - 0.5) * 0.18;
+        this.vy = (Math.random() - 0.5) * 0.18;
+        this.alpha = Math.random() * 0.7 + 0.15;
+      }
+      move() {
+        this.x += this.vx; this.y += this.vy;
+        if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+      }
+    }
+
+    function init() {
+      resize();
+      stars = Array.from({length: 160}, () => new Star());
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      stars.forEach(s => {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(180,220,255,${s.alpha})`;
+        ctx.fill();
+        s.move();
+      });
+      for (let i = 0; i < stars.length; i++) {
+        for (let j = i + 1; j < stars.length; j++) {
+          const dx = stars[i].x - stars[j].x;
+          const dy = stars[i].y - stars[j].y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.moveTo(stars[i].x, stars[i].y);
+            ctx.lineTo(stars[j].x, stars[j].y);
+            ctx.strokeStyle = `rgba(0,170,255,${0.12 * (1 - dist/120)})`;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', () => { resize(); });
+    init();
+    draw();
+  })();
+
+  /* ------ 导航滚动效果 ------ */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+    document.getElementById('backTop').classList.toggle('show', window.scrollY > 400);
+  });
+
+  /* ------ Scroll Reveal ------ */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* ------ 案例过滤按钮 ------ */
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      
+      const filter = this.dataset.filter;
+      document.querySelectorAll('.case-card').forEach(card => {
+        if (filter === 'all' || card.dataset.category === filter) {
+          card.style.display = 'block';
+          setTimeout(() => card.style.opacity = '1', 10);
+        } else {
+          card.style.opacity = '0';
+          setTimeout(() => card.style.display = 'none', 300);
+        }
+      });
+    });
+  });
+
+  /* ------ 表单提交 ------ */
+  function submitForm(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.form-submit');
+    btn.textContent = '✅ 已提交，我们将尽快联系您！';
+    btn.style.background = 'linear-gradient(90deg,#10b981,#059669)';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = '🚀 立即提交需求';
+      btn.style.background = '';
+      btn.disabled = false;
+      e.target.reset();
+    }, 4000);
+  }
+
+  /* ------ 数字滚动动画 ------ */
+  function animateNum(el, target, suffix = '') {
+    let start = 0;
+    const duration = 1800;
+    const step = timestamp => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  const numObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const nums = e.target.querySelectorAll('.num');
+        nums.forEach(n => {
+          const text = n.textContent;
+          const match = text.match(/^(\d+)/);
+          if (match) {
+            const suffix = text.replace(/^\d+/, '');
+            animateNum(n, parseInt(match[1]), suffix);
+          }
+        });
+        numObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.hero-cards').forEach(el => numObserver.observe(el));
+
+  /* ------ 从后端 API 加载数据 ------ */
+  const API_BASE = '';  // 生产环境通过 Nginx 反向代理，开发环境改为 'http://localhost:5000'
+
+  // 加载 Hero 区域数据
+  async function loadHeroData() {
+    try {
+      console.log('📡 正在调用 Hero API...');
+      const response = await fetch(`${API_BASE}/api/public/hero`);
+      console.log('📡 Hero API 响应状态:', response.status);
+      
+      if (!response.ok) {
+        console.error('❌ Hero API 返回错误:', response.status);
+        return;
+      }
+      
+      const result = await response.json();
+      console.log('✅ Hero API 返回数据:', result);
+      
+      if (result.code === 200) {
+        const data = result.data;
+        console.log('📝 Hero 数据:', data);
+        
+        // 更新 badge
+        const badgeEl = document.querySelector('.hero-badge');
+        if (badgeEl && data.badge) {
+          badgeEl.innerHTML = `<span class="dot"></span>${data.badge}`;
+          console.log('✅ 更新 badge:', data.badge);
+        }
+        
+        // 更新标题 - 优先使用 title 和 subtitle 分开的字段
+        const h1El = document.querySelector('.hero h1');
+        if (h1El) {
+          const titleText = data.title || '专注网站建设';
+          const subtitleText = data.subtitle || '平台系统开发10年';
+          // 如果 title 包含逗号，分割显示
+          if (titleText.includes('，')) {
+            const titleParts = titleText.split('，');
+            h1El.innerHTML = `${titleParts[0]}<br /><span class="highlight">${subtitleText}</span>`;
+          } else {
+            h1El.innerHTML = `${titleText}<br /><span class="highlight">${subtitleText}</span>`;
+          }
+          console.log('✅ 更新标题:', titleText, subtitleText);
+        }
+        
+        // 更新描述
+        const descEl = document.querySelector('.hero > p');
+        if (descEl && data.description) {
+          descEl.textContent = data.description;
+          console.log('✅ 更新描述:', data.description);
+        }
+        
+        // 更新按钮
+        const btns = document.querySelectorAll('.hero-btns button');
+        if (btns[0] && data.primaryBtn) {
+          btns[0].textContent = data.primaryBtn;
+          console.log('✅ 更新主按钮:', data.primaryBtn);
+        }
+        if (btns[1] && data.secondaryBtn) {
+          btns[1].textContent = data.secondaryBtn;
+          console.log('✅ 更新次按钮:', data.secondaryBtn);
+        }
+        
+        console.log('🎉 Hero 数据加载完成');
+      }
+    } catch (error) {
+      console.error('❌ Hero 数据加载失败:', error);
+    }
+  }
+
+  // 加载统计数据
+  async function loadStatsData() {
+    try {
+      console.log('📡 正在调用 Stats API...');
+      const response = await fetch(`${API_BASE}/api/public/hero/stats`);
+      const result = await response.json();
+      console.log('✅ Stats API 返回数据:', result);
+      
+      if (result.code === 200) {
+        const stats = result.data;
+        const statCards = document.querySelectorAll('.hero-cards .stat-card');
+        
+        stats.forEach((stat, index) => {
+          if (statCards[index]) {
+            const numEl = statCards[index].querySelector('.num');
+            const labelEl = statCards[index].querySelector('.label');
+            if (numEl && stat.value) numEl.textContent = stat.value;
+            if (labelEl && stat.label) labelEl.textContent = stat.label;
+            console.log(`✅ 更新统计卡片 ${index + 1}:`, stat.label, stat.value);
+          }
+        });
+        console.log('统计数据加载成功');
+      }
+    } catch (error) {
+      console.error('统计数据加载失败:', error);
+    }
+  }
+
+  // 加载服务数据
+  async function loadServicesData() {
+    try {
+      console.log('📡 正在调用 Services API...');
+      const response = await fetch(`${API_BASE}/api/public/services`);
+      const result = await response.json();
+      console.log('✅ Services API 返回数据:', result);
+      
+      if (result.code === 200) {
+        const services = result.data;
+        const servicesSection = document.getElementById('services');
+        
+        if (servicesSection) {
+          const grid = servicesSection.querySelector('.services-grid');
+          if (grid && services && services.length > 0) {
+            grid.innerHTML = services.map(service => `
+              <div class="service-card reveal">
+                <div class="service-icon">${service.icon || '🔧'}</div>
+                <h3>${service.title || ''}</h3>
+                <p>${service.description || ''}</p>
+                <div class="tags">
+                  ${(service.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+              </div>
+            `).join('');
+            // 重新初始化 reveal 动画
+            document.querySelectorAll('.service-card').forEach(el => observer.observe(el));
+            console.log(`🎉 服务数据加载成功，共 ${services.length} 条`);
+          } else {
+            console.warn('⚠️ 服务数据为空或 grid 元素不存在');
+          }
+        } else {
+          console.warn('⚠️ services 区域不存在');
+        }
+      } else {
+        console.error('❌ Services API 返回错误码:', result.code);
+      }
+    } catch (error) {
+      console.error('❌ 服务数据加载失败:', error);
+    }
+  }
+
+  // 加载案例数据
+  async function loadCasesData() {
+    try {
+      console.log('📡 正在调用 Cases API...');
+      const response = await fetch(`${API_BASE}/api/public/cases?page=1&pageSize=100`);
+      const result = await response.json();
+      console.log('✅ Cases API 返回数据:', result);
+      
+      if (result.code === 200) {
+        const cases = result.data.list;
+        const casesGrid = document.querySelector('.cases-grid');
+        
+        if (casesGrid && cases && cases.length > 0) {
+          const categoryMap = {
+            'website': '网站建设',
+            'app': 'APP开发',
+            'wechat': '微信开发',
+            'miniapp': '小程序',
+            'platform': '平台开发'
+          };
+          
+          casesGrid.innerHTML = cases.map(caseItem => `
+            <div class="case-card reveal" data-category="${caseItem.category || ''}">
+              <div class="case-thumb">
+                <div class="case-thumb-bg" style="background:${caseItem.bgColor || 'linear-gradient(135deg,#0a1628,#1a3a5c)'}">${caseItem.icon || '📁'}</div>
+                <div class="case-thumb-overlay"></div>
+              </div>
+              <div class="case-body">
+                <div class="case-category">${categoryMap[caseItem.category] || caseItem.category || '其他'}</div>
+                <h3>${caseItem.title || ''}</h3>
+                <p>${caseItem.description || ''}</p>
+                <a href="#" class="case-link">查看详情 <span>→</span></a>
+              </div>
+            </div>
+          `).join('');
+          // 重新初始化 reveal 动画
+          document.querySelectorAll('.case-card').forEach(el => observer.observe(el));
+          console.log(`🎉 案例数据加载成功，共 ${cases.length} 条`);
+        } else {
+          console.warn('⚠️ 案例数据为空或 casesGrid 元素不存在');
+        }
+      } else {
+        console.error('❌ Cases API 返回错误码:', result.code);
+      }
+    } catch (error) {
+      console.error('❌ 案例数据加载失败:', error);
+    }
+  }
+
+  // 加载新闻数据
+  async function loadNewsData() {
+    try {
+      console.log('📡 正在调用 News API...');
+      const response = await fetch(`${API_BASE}/api/public/news?page=1&pageSize=6`);
+      const result = await response.json();
+      console.log('✅ News API 返回数据:', result);
+      
+      if (result.code === 200) {
+        const news = result.data.list;
+        const newsGrid = document.querySelector('.news-grid');
+        
+        if (newsGrid && news && news.length > 0) {
+          newsGrid.innerHTML = news.map(item => {
+            const dateParts = (item.date || '2024-01-01').split('-');
+            return `
+            <div class="news-card reveal">
+              <div class="news-date">
+                <span class="day">${dateParts[2] || '01'}</span>
+                <span class="month-year">${dateParts[1] || '01'}月<br/>${dateParts[0] || '2024'}</span>
+              </div>
+              <h3>${item.title || ''}</h3>
+              <p>${item.summary || item.content || ''}</p>
+              <span class="news-tag">${item.tag || '新闻'}</span>
+            </div>
+          `}).join('');
+          // 重新初始化 reveal 动画
+          document.querySelectorAll('.news-card').forEach(el => observer.observe(el));
+          console.log(`🎉 新闻数据加载成功，共 ${news.length} 条`);
+        } else {
+          console.warn('⚠️ 新闻数据为空或 newsGrid 元素不存在');
+        }
+      } else {
+        console.error('❌ News API 返回错误码:', result.code);
+      }
+    } catch (error) {
+      console.error('❌ 新闻数据加载失败:', error);
+    }
+  }
+
+  // 加载公司信息
+  async function loadAboutData() {
+    try {
+      console.log('📡 正在调用 About API...');
+      const response = await fetch(`${API_BASE}/api/public/about`);
+      const result = await response.json();
+      console.log('✅ About API 返回数据:', result);
+      
+      if (result.code === 200) {
+        const data = result.data;
+        console.log('📝 公司信息:', data);
+        
+        // 更新联系信息
+        const contactItems = document.querySelectorAll('.contact-item');
+        let updateCount = 0;
+        
+        contactItems.forEach(item => {
+          const label = item.querySelector('.label');
+          const value = item.querySelector('.value');
+          if (label && value) {
+            const labelText = label.textContent;
+            if (labelText.includes('地址')) {
+              value.textContent = data.address;
+              console.log('✅ 更新地址:', data.address);
+              updateCount++;
+            }
+            if (labelText.includes('电话')) {
+              value.textContent = data.phone;
+              console.log('✅ 更新电话:', data.phone);
+              updateCount++;
+            }
+            if (labelText.includes('手机')) {
+              value.textContent = data.mobile;
+              console.log('✅ 更新手机:', data.mobile);
+              updateCount++;
+            }
+            if (labelText.includes('邮箱')) {
+              value.textContent = data.email;
+              console.log('✅ 更新邮箱:', data.email);
+              updateCount++;
+            }
+          }
+        });
+        
+        console.log(`🎉 公司信息加载成功，更新了 ${updateCount} 项`);
+      } else {
+        console.error('❌ About API 返回错误码:', result.code);
+      }
+    } catch (error) {
+      console.error('❌ 公司信息加载失败，使用默认内容:', error);
+    }
+  }
+
+  // 页面加载完成后获取数据
+  // 页面加载完成后立即执行
+  console.log('🚀 用户端页面开始加载...');
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('✅ DOMContentLoaded 事件触发');
+    console.log('📡 开始调用 API...');
+    loadHeroData();
+    loadStatsData();
+    loadServicesData();
+    loadCasesData();
+    loadNewsData();
+    loadAboutData();
+    
+    // 添加调试按钮
+    const debugBtn = document.createElement('button');
+    debugBtn.textContent = '🔄 重新加载 API';
+    debugBtn.style.cssText = 'position: fixed; top: 10px; right: 10px; z-index: 9999; background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px;';
+    debugBtn.onclick = () => {
+      console.log('🔄 手动触发 API 重新加载');
+      loadHeroData();
+      loadStatsData();
+      loadServicesData();
+      loadCasesData();
+      loadNewsData();
+      loadAboutData();
+    };
+    document.body.appendChild(debugBtn);
+    console.log('✅ 调试按钮已添加');
+  });
+</script>
+</body>
+</html>

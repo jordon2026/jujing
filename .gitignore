@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Backup
+backup/
+*.zip
+*.tar.gz
+
+# Logs
+*.log
+
+# WorkBuddy
+.workbuddy/
+
+# Fetch scripts (dev tools)
+fetch_site.py
+fetch_site2.py
+fetch_site3.py
+fetch_site4.py
+fetch_utf8.py
+site_content.txt
+migrate_sql_data.py
+update_image_paths.py
+test-api.html
+
+# Admin build artifacts (already built)
+admin.zip
+
+# Temp files
+*.tmp
+*.bak
+*.swp
