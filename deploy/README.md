@@ -85,10 +85,10 @@ ssh root@8.130.37.209
 yum install -y git
 
 # 2. 克隆仓库
-git clone https://github.com/jordon2026/jujing.git /var/www/jujingyun
+git clone https://github.com/jordon2026/jujing.git /www/wwwroot/jujingyun
 
 # 3. 执行一键部署脚本
-cd /var/www/jujingyun
+cd /www/wwwroot/jujingyun
 chmod +x deploy/deploy.sh
 ./deploy/deploy.sh
 ```
@@ -141,7 +141,7 @@ systemctl status nginx
 nginx -s reload
 
 # 更新代码并重启
-cd /var/www/jujingyun && git pull && systemctl restart jujingyun
+cd /www/wwwroot/jujingyun && git pull && systemctl restart jujingyun
 
 # 查看 Gunicorn 日志
 tail -f /var/log/gunicorn/jujingyun_error.log
@@ -164,5 +164,5 @@ tail -f /var/log/gunicorn/jujingyun_error.log
 | 502 Bad Gateway | `systemctl status jujingyun` 检查后端是否运行 |
 | 静态资源 404 | 检查 Nginx 配置中的 root 路径是否正确 |
 | API 返回 500 | `journalctl -u jujingyun -f` 查看后端错误日志 |
-| 权限问题 | `chown -R nginx:nginx /var/www/jujingyun` |
+| 权限问题 | `chown -R nginx:nginx /www/wwwroot/jujingyun` |
 | 端口被占用 | `netstat -tlnp \| grep :80` 检查端口占用 |

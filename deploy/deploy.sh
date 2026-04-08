@@ -8,7 +8,7 @@
 set -e
 
 # ---------- 配置项 ----------
-APP_DIR="/var/www/wwwroot/jujingyun"
+APP_DIR="/www/wwwroot/jujingyun"
 REPO_URL="https://github.com/jordon2026/jujing.git"
 DOMAIN="www.jujingyun.com"
 PYTHON_VER="3"
